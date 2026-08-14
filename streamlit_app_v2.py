@@ -23,7 +23,7 @@ import plotly.express as px
 # ------------------------------------------------------------
 DEVELOPER_NAME = "Hamaz Mubashar"
 DEVELOPER_EMAIL = "hamazmubashar2@gmail.com"
-DEVELOPER_LINKEDIN = "https://www.linkedin.com/in/PASTE_YOUR_LINKEDIN_HERE"
+DEVELOPER_LINKEDIN = "https://www.linkedin.com/in/hamazmubashar"
 
 st.set_page_config(
     page_title="StreamIntel 360 | Enterprise AI Suite",
