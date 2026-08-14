@@ -1,0 +1,58 @@
+{
+  "prediction": "HIGHER CHURN RISK",
+  "churn_probability": 0.7948,
+  "positive_churn_drivers": [
+    {
+      "feature": "tenure_months",
+      "feature_value": 8.0,
+      "contribution": 1.3488248056769376
+    },
+    {
+      "feature": "InternetService_Fiber optic",
+      "feature_value": 1.0,
+      "contribution": 0.8186423193627855
+    },
+    {
+      "feature": "subscription_tier_Two year",
+      "feature_value": 0.0,
+      "contribution": 0.3399468820374205
+    },
+    {
+      "feature": "StreamingTV_Yes",
+      "feature_value": 1.0,
+      "contribution": 0.3129591401130107
+    },
+    {
+      "feature": "StreamingMovies_Yes",
+      "feature_value": 1.0,
+      "contribution": 0.29547381395976857
+    }
+  ],
+  "negative_churn_drivers": [
+    {
+      "feature": "monthly_fee_usd",
+      "feature_value": 85.0,
+      "contribution": -0.5657218173389738
+    },
+    {
+      "feature": "total_spend_usd",
+      "feature_value": 680.0,
+      "contribution": -0.4554841185839751
+    },
+    {
+      "feature": "streaming_support_tickets_Yes",
+      "feature_value": 1.0,
+      "contribution": -0.1828960498947554
+    },
+    {
+      "feature": "DeviceProtection_Yes",
+      "feature_value": 0.0,
+      "contribution": -0.05011792936218153
+    },
+    {
+      "feature": "SeniorCitizen",
+      "feature_value": 0.0,
+      "contribution": -0.031100214203127165
+    }
+  ]
+}

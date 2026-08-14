@@ -1,0 +1,38 @@
+[
+  {
+    "doc_id": "platform_architecture",
+    "title": "StreamIntel 360 Architecture",
+    "content": "STREAMINTEL 360 is an AI-powered streaming analytics and decision\nintelligence platform combining subscriber churn prediction, demand\nforecasting, a hybrid recommendation engine, computer vision genre\nclassification, NLP sentiment analysis, LLM executive intelligence,\nRAG decision support, explainable AI, and an integration API.\n\nNotebook 06 is an inference-only LLM layer: it consumes verified\nanalytics from Notebooks 01-05 and generates an evidence-grounded\nexecutive report. No model is trained in Notebook 06 or Notebook 07.",
+    "source": "Project Architecture"
+  },
+  {
+    "doc_id": "churn_module",
+    "title": "Subscriber Churn Intelligence",
+    "content": "Notebook 01 — Subscriber Churn.\n\nTask: Subscriber churn risk prediction\nStatus: Completed\nBest Model: Logistic Regression\nVerified Metrics: {\n  \"Model\": \"Logistic Regression\",\n  \"Accuracy\": 0.8038,\n  \"Precision\": 0.6476,\n  \"Recall\": 0.5749,\n  \"F1 Score\": 0.6091,\n  \"ROC-AUC\": 0.8357\n}\nTrain Samples: 5625\nTest Samples: 1407\nFeatures Used: 30",
+    "source": "Notebook 01"
+  },
+  {
+    "doc_id": "forecasting_module",
+    "title": "Demand Forecasting Intelligence",
+    "content": "Notebook 02 — Demand Forecasting.\n\nTask: Hourly streaming demand forecasting\nBest Model (by RMSE): LSTM\nBest Model Metrics: {\n  \"Rank\": 1,\n  \"Model\": \"LSTM\",\n  \"MAE\": 9234.2484475763,\n  \"RMSE\": 12779.1202170035,\n  \"MAPE\": 8.2186209691\n}\nAll Models Compared: [\n  {\n    \"Rank\": 1,\n    \"Model\": \"LSTM\",\n    \"MAE\": 9234.2484475763,\n    \"RMSE\": 12779.1202170035,\n    \"MAPE\": 8.2186209691\n  },\n  {\n    \"Rank\": 2,\n    \"Model\": \"GRU\",\n    \"MAE\": 11306.4315691064,\n    \"RMSE\": 14776.3919800596,\n    \"MAPE\": 8.8891195348\n  },\n  {\n    \"Rank\": 3,\n    \"Model\": \"SimpleRNN\",\n    \"MAE\": 11425.0624796002,\n    \"RMSE\": 15817.5176928018,\n    \"MAPE\": 8.5094862096\n  },\n  {\n    \"Rank\": 4,\n    \"Model\": \"SARIMA\",\n    \"MAE\": 82481.6020886426,\n    \"RMSE\": 96979.5910470731,\n    \"MAPE\": 0.3896067614\n  },\n  {\n    \"Rank\": 5,\n    \"Model\": \"ARIMA\",\n    \"MAE\": 126678.6097574608,\n    \"RMSE\": 151713.2961366883,\n    \"MAPE\": 0.511007642\n  }\n]",
+    "source": "Notebook 02"
+  },
+  {
+    "doc_id": "recommendation_module",
+    "title": "Recommendation Intelligence",
+    "content": "Notebook 03 — Hybrid Recommendation Engine.\n\nTask: Hybrid movie recommendation (collaborative + content + popularity + SVD)\nStatus: Completed\nVerified Evaluation Metrics: {\n  \"model_evaluated\": \"Hybrid_Recommendation_Engine\",\n  \"evaluated_users_count\": 300,\n  \"cutoff_k\": 10,\n  \"precision_at_k\": 0.0023,\n  \"recall_at_k\": 0.0111,\n  \"map_at_k\": 0.0045,\n  \"ndcg_at_k\": 0.0068,\n  \"hit_rate_at_k\": 0.0233\n}\nOptimal Hybrid Weights: {\n  \"w_collab\": 0.7,\n  \"w_content\": 0.1,\n  \"w_pop\": 0.2,\n  \"optimal_map_at_10\": 0.005\n}",
+    "source": "Notebook 03"
+  },
+  {
+    "doc_id": "computer_vision_module",
+    "title": "Computer Vision Intelligence",
+    "content": "Notebook 04 — Computer Vision.\n\nTask: Multi-label movie poster genre classification\nFinal Model: EfficientNetB0_FineTuned\nInput Size: 299x299\nDecision Threshold: 0.3\nNumber of Genre Classes: 23\nVerified Metrics: {\n  \"test_micro_f1\": 0.5297525013164823,\n  \"test_macro_f1\": 0.2801481458257384,\n  \"test_precision\": 0.5212435233160622,\n  \"test_recall\": 0.538543897216274\n}",
+    "source": "Notebook 04"
+  },
+  {
+    "doc_id": "nlp_module",
+    "title": "NLP Sentiment Intelligence",
+    "content": "Notebook 05 — NLP and Sentiment Analysis.\n\nTask: Binary Sentiment Classification\nDataset: IMDb 50K Movie Reviews\nModel: Logistic Regression\nTF-IDF Vocabulary Size: 50000\nVerified Metrics: {\n  \"accuracy\": 0.911,\n  \"precision\": 0.9056,\n  \"recall\": 0.9176,\n  \"f1_score\": 0.9116,\n  \"roc_auc\": 0.9701\n}",
+    "source": "Notebook 05"
+  }
+]

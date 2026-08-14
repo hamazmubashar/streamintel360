@@ -1,0 +1,30 @@
+{
+    "project": "STREAMINTEL 360",
+    "module": "NLP & Sentiment",
+    "task": "Binary Sentiment Classification",
+    "dataset": "IMDb 50K Movie Reviews",
+    "training_samples": 40000,
+    "testing_samples": 10000,
+    "model": "Logistic Regression",
+    "regularization_C": 2.0,
+    "tfidf_features": 50000,
+    "tfidf_vocabulary_size": 50000,
+    "ngram_range": "(1, 2)",
+    "min_df": 2,
+    "max_df": 0.95,
+    "sublinear_tf": true,
+    "accuracy": 0.911,
+    "precision": 0.9056,
+    "recall": 0.9176,
+    "f1_score": 0.9116,
+    "roc_auc": 0.9701,
+    "training_time_seconds": 0.72,
+    "classes": [
+        "negative",
+        "positive"
+    ],
+    "decision_threshold": 0.5,
+    "model_artifact": "/kaggle/working/streamintel360_artifacts/notebook_05_nlp_sentiment/models/streamintel_sentiment_model.joblib",
+    "tfidf_artifact": "/kaggle/working/streamintel360_artifacts/notebook_05_nlp_sentiment/models/streamintel_tfidf_vectorizer.joblib",
+    "metrics_artifact": "/kaggle/working/streamintel360_artifacts/notebook_05_nlp_sentiment/metrics/final_model_eval.json"
+}
