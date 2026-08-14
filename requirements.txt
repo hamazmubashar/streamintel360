@@ -7,3 +7,4 @@ numpy
 nltk
 google-genai
 python-dotenv
+plotly
