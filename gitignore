@@ -1,0 +1,24 @@
+# Environment secrets
+.env
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+venv311/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Large raw data (keep artifacts/, exclude raw datasets if re-added later)
+data/raw/
