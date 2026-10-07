@@ -18,12 +18,6 @@
 
 ---
 
-<!--
-  📸 ADD A SCREENSHOT OR GIF HERE — this is the single highest-impact addition you can make.
-  Record a 15-20 second screen capture of the live dashboard (Home tab → Churn prediction → Poster classifier)
-  using something like ScreenToGif or LICEcap, save as demo.gif in a /docs or /assets folder, then:
-  ![StreamIntel 360 Demo](docs/demo.gif)
--->
 
 ## 📖 Overview
 
