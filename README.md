@@ -1,10 +1,8 @@
 <div align="center">
 
-# ⚡ StreamIntel 360
+# StreamIntel 360
 
-### Enterprise Multi-Model AI Suite for Streaming Analytics
-
-**9 connected ML/AI modules — churn prediction, demand forecasting, hybrid recommendations, computer vision, NLP, and LLM-powered decision intelligence — deployed as one live, interactive platform.**
+**Eight machine learning and AI models for a streaming platform, connected through one API and one live dashboard.**
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamintel360-h5l8i2mdn5sfphbwsvcsyg.streamlit.app/)
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
@@ -12,33 +10,51 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
-**[🚀 Try the Live Demo](https://streamintel360-h5l8i2mdn5sfphbwsvcsyg.streamlit.app/)** · [Architecture](#-architecture) · [Modules](#-the-9-modules) · [Setup](#-setup)
+[**Try the live demo**](https://streamintel360-h5l8i2mdn5sfphbwsvcsyg.streamlit.app/) · [Results](#results) · [How it fits together](#how-it-fits-together) · [Run it](#run-it-locally)
 
 </div>
 
 ---
 
+## What this is
 
-## 📖 Overview
+A streaming service doesn't need one model, it needs several that share data and answer to the same team. I built StreamIntel 360 to practise exactly that: eight models covering churn, demand, recommendations, posters, reviews, reporting, Q&A and explainability, all saving their outputs in one agreed format so a single FastAPI backend (the ninth module) can serve any of them.
 
-Most ML portfolio projects solve **one** problem — a churn classifier, a recommender, a sentiment model. StreamIntel 360 is different: it's a **connected system of 8 AI modules plus an integration API (9 modules in total)** built the way a real streaming platform (Netflix, Hulu-style) would actually need them to work together — sharing a common artifact contract, orchestrated behind a single FastAPI backend, and surfaced through one live dashboard.
+For every model I compared several algorithms and let a chosen metric pick the winner, instead of deciding up front. This was my capstone at the Boston Institute of Analytics and was graded 9/10.
 
-Every model is trained on real data, evaluated against multiple candidate algorithms (not just one), and the winner is auto-selected by an evidence-based metric — never hardcoded.
+## The modules
 
-## 🎯 Problem → Solution
+| # | Business question | What I built | Chosen model |
+|---|---|---|---|
+| 01 | Which subscribers are about to cancel? | Churn classifier (5 algorithms compared) | Logistic Regression |
+| 02 | How much traffic will hit us next hour? | 24-hour sequence forecaster (RNN, LSTM, GRU, ARIMA/SARIMA) | LSTM |
+| 03 | What should each user watch next? | Hybrid recommender: collaborative, content, popularity and SVD signals with tuned weights | Hybrid |
+| 04 | Can we tag genres without manual work? | Multi-label genre classifier on poster images (4 CNNs compared) | EfficientNetB0 |
+| 05 | How do viewers feel about titles? | Sentiment classifier on 50K IMDb reviews | Logistic Regression + TF-IDF |
+| 06 | Can leadership get a readable summary? | Executive briefing written by an LLM from the verified metrics above | Gemini Flash Lite |
+| 07 | Can anyone ask questions in plain English? | Retrieval-augmented Q&A over the project's own evidence | TF-IDF retrieval + Gemini |
+| 08 | Why did a model decide that? | Feature contributions for churn; before/after view of the recommender's weights | Coefficient & weight analysis |
+| 09 | How does an app use all of this? | FastAPI backend with 10 endpoints | — |
 
-| Business Problem | Module | Solution |
+## Results
+
+| Module | Metric | Result |
 |---|---|---|
-| Subscribers churn with no warning | **01 · Churn Prediction** | Classify at-risk subscribers before they cancel |
-| Demand spikes strain infrastructure | **02 · Demand Forecasting** | Forecast next-hour viewership to plan capacity ahead |
-| Generic recommendations lose engagement | **03 · Recommendation Engine** | Hybrid, weight-optimized personalized recommendations |
-| Manual content tagging doesn't scale | **04 · Computer Vision** | Auto-classify movie genres directly from poster art |
-| User sentiment is hard to track at scale | **05 · NLP & Sentiment** | Classify review sentiment automatically |
-| Technical outputs aren't executive-friendly | **06 · LLM Intelligence** | Auto-generate evidence-grounded executive briefings |
-| Insights are siloed across teams | **07 · RAG Decision Engine** | Ask natural-language questions, get evidence-backed answers |
-| "Black box" models erode trust | **08 · Explainable AI** | Transparent, real feature/weight-level explanations |
+| Churn | F1 / ROC-AUC | 60.9% / 83.6% |
+| Forecasting | RMSE / MAPE | 12,779 / 8.22% |
+| Recommendations | MAP@10 / Hit rate@10 | 0.45% / 2.33% |
+| Poster genres | Micro F1 (23 classes) | 52.8% |
+| Sentiment | Accuracy / ROC-AUC | 91.1% / 97.0% |
 
-## 🏗️ Architecture
+A few things the numbers taught me:
+
+- **Picking by one metric can fool you.** ResNet50V2 reached 97.8% recall on poster genres, but only because it predicted almost every genre for every poster (10.2% precision). EfficientNetB0 won on micro F1, which balances the two.
+- **Tuning should change something, or it isn't worth reporting.** Grid search moved the recommender's collaborative weight from my default of 45% to 70%. Module 08 shows that difference directly.
+- **I chose RMSE over MAE for forecasting on purpose.** RMSE punishes the rare big misses, and those are the ones that take a platform down.
+- **Stopword lists can flip sentiment.** The standard ones remove "not" and "never", which turns "not good" into "good". I kept negations in.
+- **Recommendation scores are low, and I've kept them visible.** MAP@10 of 0.45% is weak in absolute terms; sparse rating data makes this hard, and it's on the improvement list below.
+
+## How it fits together
 
 ```mermaid
 flowchart LR
@@ -46,129 +62,37 @@ flowchart LR
         A[01 Churn] --> B[02 Forecasting]
         B --> C[03 Recommendations]
         C --> D[04 Computer Vision]
-        D --> E[05 NLP Sentiment]
+        D --> E[05 Sentiment]
     end
-    subgraph Local["Orchestrated Locally"]
-        F[06 LLM Intelligence] --> G[07 RAG Engine]
-        G --> H[08 Explainable AI]
+    subgraph Local["Run locally"]
+        F[06 LLM briefing] --> G[07 RAG Q&A]
+        G --> H[08 Explainability]
     end
     E --> F
-    H --> I[09 Integration API<br/>FastAPI · 10 endpoints]
-    I --> J[Streamlit Frontend<br/>Live Dashboard]
-
-    style Kaggle fill:#1D1B57,stroke:#D97706,color:#fff
-    style Local fill:#1D1B57,stroke:#D97706,color:#fff
-    style I fill:#D97706,stroke:#1D1B57,color:#fff
-    style J fill:#0A0E17,stroke:#D97706,color:#fff
+    H --> I[09 FastAPI · 10 endpoints]
+    I --> J[Streamlit dashboard]
 ```
 
-Every module reads/writes to a standardized artifact structure (`models/`, `preprocessors/`, `metrics/`, `metadata/`), so the API and frontend can load **any** trained model with zero custom glue code per module.
+Every module writes to the same folder layout (`models/`, `preprocessors/`, `metrics/`, `metadata/`). That contract is what lets the API load any trained model without module-specific code, and it made moving models from Kaggle to my machine painless.
 
-## 🧠 The 9 Modules
+## Problems I had to solve along the way
 
-<details>
-<summary><b>01 · Subscriber Churn Prediction</b> — Logistic Regression · F1 60.9% · ROC-AUC 83.6%</summary>
+- **A model that wouldn't unpickle.** The recommender was saved while running as `__main__`, so importing it elsewhere failed. I fixed it by registering the class under `__main__` before loading.
+- **Deployment platform dead ends.** Hugging Face Spaces needed a paid tier for this setup, and Streamlit Cloud first forced a Python version my stack didn't support. I worked through both before landing a stable deployment.
+- **A silent upload failure.** A `starlette` / `python-multipart` version mismatch broke the image upload endpoint without a clear error.
 
-5 algorithms compared — Logistic Regression, Decision Tree, Random Forest, XGBoost, and a Neural Network. Logistic Regression won on F1 score, chosen specifically for its direct interpretability, which powers the Explainable AI module downstream.
+## Tech stack
 
-| Metric | Score |
+| Area | Tools |
 |---|---|
-| Accuracy | 80.4% |
-| Precision | 64.8% |
-| Recall | 57.5% |
-| F1 Score | 60.9% |
-| ROC-AUC | 83.6% |
+| Machine learning | scikit-learn, XGBoost, TensorFlow / Keras |
+| NLP and LLMs | TF-IDF, Google Gemini |
+| Backend | FastAPI |
+| Frontend | Streamlit, Plotly |
+| Training | Kaggle GPU |
+| Hosting and versioning | Streamlit Community Cloud, Git LFS for model files |
 
-</details>
-
-<details>
-<summary><b>02 · Demand Forecasting</b> — LSTM · RMSE 12,779 · MAPE 8.22%</summary>
-
-24-hour sequence forecasting across 5 architectures — SimpleRNN, LSTM, GRU, plus ARIMA/SARIMA statistical baselines — using 17 engineered temporal features (calendar encodings, lag_1/24/168, rolling statistics). LSTM selected by lowest RMSE — deliberately chosen over MAE to penalize rare, high-risk forecasting misses more heavily.
-
-| Model | MAE | RMSE | MAPE |
-|---|---|---|---|
-| **LSTM** | 9,234 | **12,779** | 8.22% |
-| GRU | 11,306 | 14,776 | 8.89% |
-| SimpleRNN | 11,425 | 15,818 | 8.51% |
-
-</details>
-
-<details>
-<summary><b>03 · Hybrid Recommendation Engine</b> — Collaborative + Content + Popularity + SVD</summary>
-
-4 signals blended via grid-search-optimized weights. The optimization genuinely changed the model: collaborative filtering's weight rose from a hardcoded 45% default to a data-driven **70%** optimum — real, provable evidence the tuning mattered.
-
-| Metric | Value |
-|---|---|
-| MAP@10 | 0.45% |
-| Hit Rate@10 | 2.33% |
-| Precision@10 | 0.23% |
-
-</details>
-
-<details>
-<summary><b>04 · Computer Vision — Poster Genre Classification</b> — EfficientNetB0 · Micro F1 52.8%</summary>
-
-4 CNN architectures benchmarked (Custom CNN, MobileNetV2, EfficientNetB0, ResNet50V2) on 23-class multi-label genre classification, 299×299 input, per-class decision thresholds. EfficientNetB0 won on Micro F1 — notably, ResNet50V2 scored 97.8% recall but only 10.2% precision, a textbook case of why single-metric evaluation is misleading.
-
-</details>
-
-<details>
-<summary><b>05 · NLP & Sentiment Analysis</b> — Logistic Regression + TF-IDF · 91.1% Accuracy</summary>
-
-IMDb 50K review dataset, binary sentiment classification. Custom negation-aware preprocessing deliberately preserves words like "not" and "never" that standard stopword removal would strip — preventing "not good" from collapsing into "good."
-
-| Metric | Score |
-|---|---|
-| Accuracy | 91.1% |
-| ROC-AUC | 97.0% |
-
-</details>
-
-<details>
-<summary><b>06 · LLM Executive Intelligence</b> — Gemini 3.1 Flash Lite · Inference-only</summary>
-
-Zero-training, evidence-grounded report generation — synthesizes verified metrics from Modules 01-05 into an executive briefing in under 5 seconds, with a strict no-hallucination prompt policy.
-
-</details>
-
-<details>
-<summary><b>07 · RAG Decision Engine</b> — TF-IDF Retrieval + Gemini Generation</summary>
-
-Natural-language Q&A grounded strictly in retrieved project evidence — retrieval via TF-IDF + cosine similarity, generation constrained to only use what was retrieved.
-
-</details>
-
-<details>
-<summary><b>08 · Explainable AI</b> — Coefficient Analysis + Weight Comparison</summary>
-
-Real, verifiable transparency: per-feature churn contribution scores, and a genuine before/after comparison of recommendation engine weights (hardcoded default vs. grid-search optimum).
-
-</details>
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|---|---|
-| **ML / DL** | scikit-learn, XGBoost, TensorFlow/Keras |
-| **NLP / LLM** | TF-IDF, Google Gemini 3.1 |
-| **Backend** | FastAPI |
-| **Frontend** | Streamlit + Plotly |
-| **Training** | Kaggle GPU |
-| **Deployment** | Streamlit Community Cloud |
-| **Version Control** | Git + Git LFS |
-
-## ⚙️ Engineering Challenges Solved
-
-Real deployment isn't just training models — here's what actually had to be debugged:
-
-- **Cross-environment `pickle` resolution** — the recommendation engine was serialized while running as Python's `__main__`; loading it from an imported module required an explicit `sys.modules["__main__"]` registration workaround.
-- **Platform incompatibilities navigated** — evaluated Hugging Face Spaces (requires paid tier for server-side Gradio) and worked through a confirmed Streamlit Cloud platform bug (forced an incompatible Python version) before reaching a stable deployment.
-- **Dependency version conflicts** — resolved a `starlette`/`python-multipart` mismatch that silently broke file-upload endpoints.
-- **Kaggle → local artifact handoff** — designed a standardized artifact contract so models trained on Kaggle GPU integrate seamlessly with a locally-orchestrated API layer.
-
-## 🚀 Setup
+## Run it locally
 
 ```bash
 git clone https://github.com/hamazmubashar/streamintel360.git
@@ -176,75 +100,35 @@ cd streamintel360
 pip install -r requirements.txt
 ```
 
-**Run the dashboard locally:**
+Add a `.env` file with `GEMINI_API_KEY=your_key_here` (only the LLM and Q&A modules need it), then:
+
 ```bash
-streamlit run streamlit_app_v2.py
+streamlit run streamlit_app_v2.py      # dashboard
+uvicorn app_main:app --reload          # API on its own, docs at http://127.0.0.1:8000/docs
 ```
 
-**Run the API standalone:**
-```bash
-uvicorn app_main:app --reload
-# Interactive docs at http://127.0.0.1:8000/docs
-```
-
-**Environment variables required:**
-```
-GEMINI_API_KEY=your_key_here
-```
-
-## 📁 Project Structure
+## Project structure
 
 ```
 streamintel360/
-├── app_main.py              # FastAPI backend — 10 endpoints, all 9 modules
-├── streamlit_app_v2.py      # Streamlit frontend — live dashboard
+├── app_main.py            # FastAPI backend, 10 endpoints
+├── streamlit_app_v2.py    # dashboard
 ├── requirements.txt
-├── Dockerfile
-├── artifacts/                # Trained models, scalers, metrics (Git LFS)
-│   ├── notebook_01_churn/
-│   ├── notebook_02_forecasting/
-│   ├── notebook_03_recommendations/
-│   ├── notebook_04_computer_vision/
-│   ├── notebook_05_nlp_sentiment/
-│   ├── notebook_06_llm/
-│   ├── notebook_07_rag/
-│   └── notebook_08_explainable_ai/
-└── notebooks/                 # Full training pipeline, Kaggle + local
+├── runtime.txt
+├── artifacts/             # trained models, preprocessors and metrics (Git LFS)
+└── notebooks/             # the 9 notebooks, from churn to the integration API
 ```
 
-## 📊 Results Summary
+## What I'd improve next
 
-| Module | Production Model | Key Metric | Result |
-|---|---|---|---|
-| 01 Churn | Logistic Regression | F1 Score | 60.9% |
-| 02 Forecasting | LSTM | RMSE | 12,779 |
-| 03 Recommendations | Hybrid (Collab+Content+Pop+SVD) | MAP@10 | 0.45% |
-| 04 Computer Vision | EfficientNetB0 (fine-tuned) | Micro F1 | 52.8% |
-| 05 NLP Sentiment | Logistic Regression + TF-IDF | Accuracy | 91.1% |
-| 06 LLM Intelligence | Gemini 3.1 Flash Lite | Policy | Zero-hallucination |
-| 07 RAG | TF-IDF + Gemini | Policy | Evidence-grounded |
-| 08 Explainable AI | Coefficient + weight analysis | Coverage | Churn + Recommendations |
+- Raise churn recall (57.5% today) with threshold tuning or cost-sensitive training
+- Better recommendation quality, starting with implicit-feedback models
+- Feed the forecaster live features instead of batch-built ones
+- Extend explanations to the vision and sentiment models
+- Add CI to retrain and re-evaluate automatically
 
-## 🔮 Future Improvements
+## Author
 
-- [ ] Improve churn recall (currently 57.5%) via threshold tuning / cost-sensitive learning
-- [ ] Real-time feature pipeline for forecasting (currently uses batch-engineered features)
-- [ ] Expand explainability to remaining modules (CV, NLP)
-- [ ] CI/CD pipeline for automated retraining
+**Hamaz Mubashar** · [LinkedIn](https://www.linkedin.com/in/hamazmubashar) · [GitHub](https://github.com/hamazmubashar) · hamazmubashar2@gmail.com
 
-## 👤 Author
-
-**Hamaz Mubashar**
-[LinkedIn](https://linkedin.com/in/hamazmubashar) · [GitHub](https://github.com/hamazmubashar) · hamazmubashar2@gmail.com
-
-## 📄 License
-
-This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
-
----
-
-<div align="center">
-
-If this project was useful or interesting, consider ⭐ starring the repo!
-
-</div>
+Released under the [MIT License](LICENSE).
