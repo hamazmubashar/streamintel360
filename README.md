@@ -21,7 +21,7 @@
 
 ## 📖 Overview
 
-Most ML portfolio projects solve **one** problem — a churn classifier, a recommender, a sentiment model. StreamIntel 360 is different: it's a **connected system of 8 AI modules** built the way a real streaming platform (Netflix, Hulu-style) would actually need them to work together — sharing a common artifact contract, orchestrated behind a single FastAPI backend, and surfaced through one live dashboard.
+Most ML portfolio projects solve **one** problem — a churn classifier, a recommender, a sentiment model. StreamIntel 360 is different: it's a **connected system of 8 AI modules plus an integration API (9 modules in total)** built the way a real streaming platform (Netflix, Hulu-style) would actually need them to work together — sharing a common artifact contract, orchestrated behind a single FastAPI backend, and surfaced through one live dashboard.
 
 Every model is trained on real data, evaluated against multiple candidate algorithms (not just one), and the winner is auto-selected by an evidence-based metric — never hardcoded.
 
